@@ -107,6 +107,8 @@ void phnExInt_ReceiveHandler(uint8_t value)
 {
 #if(PLATFORM_MASTER)
 	
+	printf("EXT = %d\r\n", value);
+	
 #endif
 }
 

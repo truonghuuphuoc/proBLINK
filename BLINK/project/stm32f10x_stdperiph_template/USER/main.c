@@ -56,7 +56,15 @@ int main(void)
 	phnMaster_Processing();
 #elif(PLATFORM_SALVE)
 	phnSlave_Processing();
-#endif	
+#endif
+
+	phnUsart1_Init();
+	phnOsal_Init();
+	phnExInt_Init();
+	
+	phnNvic_InitGroup();
+	
+	while(1);	
 
 }
 
