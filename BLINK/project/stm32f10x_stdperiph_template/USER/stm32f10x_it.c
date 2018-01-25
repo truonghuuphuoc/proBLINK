@@ -186,30 +186,59 @@ void EXTI3_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line3) != RESET) 
 	{
-		phnExInt_ReceiveHandler(4);
+		phnExInt_ReceiveHandler(1);
 		EXTI_ClearITPendingBit(EXTI_Line3);
 	}
 }
 
 
+void EXTI4_IRQHandler(void)
+{
+	if (EXTI_GetITStatus(EXTI_Line4) != RESET) 
+	{
+		phnExInt_ReceiveHandler(1);
+		EXTI_ClearITPendingBit(EXTI_Line4);
+	}
+}
+
+void EXTI9_5_IRQHandler(void)
+{
+	if (EXTI_GetITStatus(EXTI_Line5) != RESET) 
+	{
+		phnExInt_ReceiveHandler(2);
+		EXTI_ClearITPendingBit(EXTI_Line5);
+	}
+	
+	if (EXTI_GetITStatus(EXTI_Line6) != RESET) 
+	{
+		phnExInt_ReceiveHandler(3);
+		EXTI_ClearITPendingBit(EXTI_Line6);
+	}
+	
+	if (EXTI_GetITStatus(EXTI_Line7) != RESET) 
+	{
+		phnExInt_ReceiveHandler(4);
+		EXTI_ClearITPendingBit(EXTI_Line7);
+	}
+}
 
 void EXTI15_10_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET) 
 	{
-		phnExInt_ReceiveHandler(1);
+		phnExInt_ReceiveHandler(4);
 		EXTI_ClearITPendingBit(EXTI_Line13);
 	}
 	
 	if (EXTI_GetITStatus(EXTI_Line14) != RESET) 
 	{
-		phnExInt_ReceiveHandler(2);
+		phnExInt_ReceiveHandler(3);
 		EXTI_ClearITPendingBit(EXTI_Line14);
 	}
 	
 	if (EXTI_GetITStatus(EXTI_Line15) != RESET) 
 	{
-		phnExInt_ReceiveHandler(3);
+		phnExInt_ReceiveHandler(2);
 		EXTI_ClearITPendingBit(EXTI_Line15);
 	}
 }

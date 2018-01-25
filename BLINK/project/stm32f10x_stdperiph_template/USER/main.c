@@ -51,20 +51,139 @@
   */
 int main(void)
 {
-
+	uint32_t currTime = 0;
+	uint32_t deltaTime = 0;
+	
+	phnUsart1_Init();
+	phnOsal_Init();
+	phnExInt_Init();
+	
+	phnLed_Init();
+	
+	phnNvic_InitGroup();
+	
+	
 #if(PLATFORM_MASTER)
 	phnMaster_Processing();
 #elif(PLATFORM_SALVE)
 	phnSlave_Processing();
 #endif
-
-	phnUsart1_Init();
-	phnOsal_Init();
-	phnExInt_Init();
 	
-	phnNvic_InitGroup();
-	
-	while(1);	
+	while(1)
+	{
+		if(gMachineStatus.mCurrCommand != PHN_COMMAND_NONE)
+		{
+			gMachineStatus.mPrevCommand = gMachineStatus.mCurrCommand;
+			
+			switch(gMachineStatus.mPrevCommand)
+			{
+				case PHN_COMMAND_UP: //increase ligth up
+					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_OFF)
+					{
+						gMachineStatus.mFrequence	= 1000;
+						gMachineStatus.mCurrStatus  = PHN_STAT_LED_BLINK;
+					}
+					else if(gMachineStatus.mCurrStatus == PHN_STAT_LED_BLINK)
+					{
+												
+						if(gMachineStatus.mFrequence > 200)
+						{
+							gMachineStatus.mFrequence -= 200;
+						}
+						else
+						{
+							gMachineStatus.mCurrStatus = PHN_STAT_LED_ON;
+						}
+					}
+					break;
+				
+				case PHN_COMMAND_DOWN: //decrease ligth down
+					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_ON)
+					{
+						gMachineStatus.mFrequence	= 200;
+						gMachineStatus.mCurrStatus  = PHN_STAT_LED_BLINK;
+					}
+					else if(gMachineStatus.mCurrStatus == PHN_STAT_LED_BLINK)
+					{
+						gMachineStatus.mFrequence += 200;
+						
+						if(gMachineStatus.mFrequence >= 1000)
+						{
+							gMachineStatus.mCurrStatus = PHN_STAT_LED_OFF;
+						}
+					}
+					break;
+				
+				case PHN_COMMAND_ONOFF:
+					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_OFF)
+					{
+						gMachineStatus.mCurrStatus = PHN_STAT_LED_ON;
+					}
+					else
+					{
+						gMachineStatus.mCurrStatus = PHN_STAT_LED_OFF;
+					}
+					
+					break;
+				
+				case PHN_COMMAND_BLINK:
+					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_BLINK)
+					{
+						gMachineStatus.mCurrStatus = PHN_STAT_LED_OFF;
+					}
+					else
+					{
+						gMachineStatus.mCurrStatus = PHN_STAT_LED_BLINK;
+						gMachineStatus.mFrequence = 500;
+					}
+					break;
+				
+				default:
+					break;
+			}
+			
+			gMachineStatus.mCurrCommand = PHN_COMMAND_NONE;
+		}
+		
+		switch(gMachineStatus.mCurrStatus)
+		{
+			case PHN_STAT_LED_ON:
+				if(gMachineStatus.mCurrStatus != gMachineStatus.mPrevStatus)
+				{
+					phnLed_SetLeds(1);
+				}
+				break;
+			
+			case PHN_STAT_LED_OFF:
+				if(gMachineStatus.mCurrStatus != gMachineStatus.mPrevStatus)
+				{
+					phnLed_SetLeds(0);
+				}
+				break;
+			
+			case PHN_STAT_LED_BLINK:
+				if(gMachineStatus.mCurrStatus != gMachineStatus.mPrevStatus)
+				{
+					phnLed_ToggleLeds();
+					currTime = phnOsal_GetCurrentTickCount();
+				}
+				
+				deltaTime = phnOsal_GetElapseTime(currTime);
+				
+				if(deltaTime > gMachineStatus.mFrequence)
+				{
+					phnLed_ToggleLeds();
+					currTime = phnOsal_GetCurrentTickCount();
+				}
+				
+				break;
+			
+			default:
+				break;
+		}
+		
+		gMachineStatus.mPrevStatus = gMachineStatus.mCurrStatus;
+	}		
 
 }
 

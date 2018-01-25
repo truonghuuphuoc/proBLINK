@@ -17,7 +17,33 @@
 /*End message*/	 
 #define MESG_ETX			0x03
 
+typedef enum
+{
+	PHN_STAT_LED_ON		= 0x00,
+	PHN_STAT_LED_OFF	= 0x01,
+	PHN_STAT_LED_BLINK	= 0x02,
+}phnMachineState_t;
 
+typedef enum
+{
+	PHN_COMMAND_NONE	= 0x00,
+	PHN_COMMAND_ONOFF	= 0x01,
+	PHN_COMMAND_BLINK	= 0x02,
+	PHN_COMMAND_UP		= 0x03,
+	PHN_COMMAND_DOWN	= 0x04,
+}phnCommand_t;
+
+typedef struct
+{
+	uint8_t		mPrevCommand;
+	uint8_t		mCurrCommand;
+	uint8_t		mPrevStatus;
+	uint8_t		mCurrStatus;
+	uint32_t	mFrequence;
+}phnMessageStatus_t;
+
+
+extern phnMessageStatus_t gMachineStatus;
 	 
 /**
   * @brief  

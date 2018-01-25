@@ -2,6 +2,14 @@
 #include "phnCrc.h"
 #include "phnOsal.h"
 
+phnMessageStatus_t gMachineStatus = 
+{
+	PHN_COMMAND_NONE,
+	PHN_COMMAND_NONE,
+	PHN_STAT_LED_OFF,
+	PHN_STAT_LED_OFF,
+	0,
+};
 
 void phnMessage_GetMessageFormat(uint8_t *data, uint16_t inLength, uint8_t *message, uint16_t *outLength)
 {

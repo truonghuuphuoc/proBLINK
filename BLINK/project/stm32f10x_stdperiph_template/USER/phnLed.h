@@ -25,6 +25,12 @@ void phnLed_Init(void);
 void phnLed_SetLeds(uint8_t status);
 
 
+/**
+  * @brief  Toggle led
+  * @param  
+  * @retval None
+  */
+void phnLed_ToggleLeds(void);
 
 #ifdef __cplusplus
 }
