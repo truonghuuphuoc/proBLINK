@@ -80,7 +80,7 @@ int main(void)
 				case PHN_COMMAND_UP: //increase ligth up
 					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_OFF)
 					{
-						gMachineStatus.mFrequence	= 1000;
+						gMachineStatus.mFrequence	= 1100;
 						gMachineStatus.mCurrStatus  = PHN_STAT_LED_BLINK;
 					}
 					else if(gMachineStatus.mCurrStatus == PHN_STAT_LED_BLINK)
@@ -90,26 +90,20 @@ int main(void)
 						{
 							gMachineStatus.mFrequence -= 200;
 						}
-						else
-						{
-							gMachineStatus.mCurrStatus = PHN_STAT_LED_ON;
-						}
 					}
 					break;
 				
 				case PHN_COMMAND_DOWN: //decrease ligth down
 					if(gMachineStatus.mCurrStatus == PHN_STAT_LED_ON)
 					{
-						gMachineStatus.mFrequence	= 200;
+						gMachineStatus.mFrequence	= 100;
 						gMachineStatus.mCurrStatus  = PHN_STAT_LED_BLINK;
 					}
 					else if(gMachineStatus.mCurrStatus == PHN_STAT_LED_BLINK)
 					{
-						gMachineStatus.mFrequence += 200;
-						
-						if(gMachineStatus.mFrequence >= 1000)
+						if(gMachineStatus.mFrequence < 900)
 						{
-							gMachineStatus.mCurrStatus = PHN_STAT_LED_OFF;
+							gMachineStatus.mFrequence += 200;
 						}
 					}
 					break;
